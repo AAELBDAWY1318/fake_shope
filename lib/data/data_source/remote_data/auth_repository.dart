@@ -6,6 +6,7 @@ import 'package:fake_shope_app/data/models/user_model.dart';
 import 'package:fake_shope_app/utils/constant/app_text.dart';
 import 'package:fake_shope_app/utils/constant/app_urls.dart';
 import 'package:fake_shope_app/utils/functions/check_connection.dart';
+import 'package:fake_shope_app/utils/helpers/shared_preferences_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
@@ -44,6 +45,13 @@ class AuthRepository {
         if (response.statusCode >= 200 && response.statusCode <= 202) {
           var data = json.decode(response.body);
           if (data["status"]) {
+            await SharedPreferencesHelper().saveUser(User(
+              email: data["data"]["email"],
+              image: data["data"]["image"],
+              name: data["data"]["name"],
+              password: "",
+              phone: data["data"]["phone"],
+            ));
             return Left(data["data"]["token"]);
           } else {
             return const Right(AppText.wrongEmail);

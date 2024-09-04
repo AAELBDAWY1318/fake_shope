@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:either_dart/either.dart';
 import 'package:fake_shope_app/data/data_source/remote_data/products_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +15,10 @@ class TestScreen extends StatelessWidget {
           child: TextButton(
             child: const Text("TEST"),
             onPressed: () async {
-              String res = await ProductsRepository().deteteFromFav(id: 187265);
-              log(res);
+              Either<List<Map<String, dynamic>>, String> res =
+                  await ProductsRepository().getFavProducts();
+
+              res.fold((left) => log("$left"), (right) => log(right));
             },
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:fake_shope_app/test.dart';
 import 'package:fake_shope_app/view/screens/splash.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SplashScreen(),
+      home: TestScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

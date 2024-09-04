@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fake_shope_app/data/data_source/remote_data/auth_repository.dart';
+import 'package:fake_shope_app/data/models/user_model.dart';
 import 'package:fake_shope_app/logic/auth_bloc/auth_bloc.dart';
 import 'package:fake_shope_app/utils/functions/email_validation.dart';
 import 'package:fake_shope_app/utils/functions/password_validation.dart';
 import 'package:fake_shope_app/utils/functions/show_dialog.dart';
+import 'package:fake_shope_app/utils/helpers/shared_preferences_helper.dart';
 import 'package:fake_shope_app/utils/helpers/size.dart';
 import 'package:fake_shope_app/utils/route_navigation/routes.dart';
 import 'package:fake_shope_app/view/screens/auth/signup/signup.dart';
@@ -34,12 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocProvider(
       create: (context) => AuthBloc(AuthRepository()),
       child: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginWaiting) {
             showLoadingDialog(context);
           } else if (state is LoginSuccess) {
             pop(context);
-            pushAndRemoveAll(context, page: const AppLayout());
+            User ? user = await SharedPreferencesHelper().getUser();
+            pushAndRemoveAll(context, page: AppLayout(user: user!,));
           } else if (state is LoginFailure) {
             pop(context);
             showErrorDialog(context, state.message);

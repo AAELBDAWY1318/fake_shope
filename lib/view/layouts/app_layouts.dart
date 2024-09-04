@@ -1,11 +1,20 @@
+import 'dart:developer';
+
+import 'package:fake_shope_app/data/models/user_model.dart';
 import 'package:fake_shope_app/utils/constant/app_colors.dart';
+import 'package:fake_shope_app/utils/helpers/shared_preferences_helper.dart';
 import 'package:fake_shope_app/utils/helpers/size.dart';
+import 'package:fake_shope_app/utils/route_navigation/routes.dart';
 import 'package:fake_shope_app/view/screens/home_screen/home_screen.dart';
 import 'package:fake_shope_app/view/screens/home_screen/profile.dart';
+import 'package:fake_shope_app/view/screens/watchlist_screen.dart';
+import 'package:fake_shope_app/view/widgets/edit_profile.dart';
+import 'package:fake_shope_app/view/widgets/sparate_line.dart';
 import 'package:flutter/material.dart';
 
 class AppLayout extends StatefulWidget {
-  const AppLayout({super.key});
+  final User user;
+  const AppLayout({super.key, required this.user});
 
   @override
   State<AppLayout> createState() => _AppLayoutState();
@@ -46,7 +55,83 @@ class _AppLayoutState extends State<AppLayout> {
             ),
           ],
         ),
-        drawer: const Drawer(),
+        drawer: Drawer(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: sizeConfig.screenWidth! * 0.02),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: sizeConfig.screenHeight! * 0.02,
+                ),
+                Image.asset(
+                  "assets/images/logoo.png",
+                  height: sizeConfig.screenHeight! * 0.2,
+                  width: sizeConfig.screenWidth! * 0.2,
+                  fit: BoxFit.cover,
+                ),
+                EditProfile(onTap: () {}, image: widget.user.image, name: widget.user.name),
+                SizedBox(
+                  height: sizeConfig.screenHeight! * 0.02,
+                ),
+                const CustomLine(),
+                ListTile(
+                  leading: Icon(
+                    Icons.notifications,
+                    size: sizeConfig.screenWidth! * 0.08,
+                  ),
+                  title: const Text('Notification'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.favorite,
+                    size: sizeConfig.screenWidth! * 0.08,
+                    color: AppColors.primaryColor,
+                  ),
+                  title: const Text('Watchlist'),
+                  onTap: () {
+                    push(context, page: const FavoriteScreen());
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.shopping_cart,
+                    size: sizeConfig.screenWidth! * 0.08,
+                  ),
+                  title: const Text('Orders'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.account_balance_wallet,
+                    size: sizeConfig.screenWidth! * 0.08,
+                  ),
+                  title: const Text('Wallet'),
+                  onTap: () {},
+                ),
+                 ListTile(
+                  leading: Icon(
+                    Icons.settings,
+                    size: sizeConfig.screenWidth! * 0.08,
+                  ),
+                  title: const Text('Setting'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.logout,
+                    size: sizeConfig.screenWidth! * 0.08,
+                    color: AppColors.primaryColor,
+                  ),
+                  title: const Text('Log Out'),
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           elevation: 0.0,

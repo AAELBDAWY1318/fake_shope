@@ -21,16 +21,17 @@ class Product extends Equatable {
 
   static Product fromJson({required Map<String, dynamic> json}) {
     return Product(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        price: (json["price"] as num).toDouble(),
-        discount: (json["discount"] as num).toDouble(),
-        inCart: json["in_cart"],
-        images: json["images"],
-        inFavorites: json["in_favorites"],
-        oldPrice: (json["old_price"] as num).toDouble(),
-        image: json["image"]);
+      id: json["id"],
+      name: json["name"],
+      description: json["description"],
+      price: (json["price"] as num).toDouble(),
+      discount: (json["discount"] as num).toDouble(),
+      inCart: json["in_cart"] ?? false,
+      images: json["images"] ?? [],
+      inFavorites: json["in_favorites"] ?? false,
+      oldPrice: (json["old_price"] as num).toDouble(),
+      image: json["image"],
+    );
   }
 
   @override

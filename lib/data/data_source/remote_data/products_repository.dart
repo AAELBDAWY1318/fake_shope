@@ -95,8 +95,7 @@ class ProductsRepository {
             'Authorization': token,
           };
           var url = Uri.parse("${AppUrl.baseUrl}${AppUrl.favorites}/$id");
-          Response response =
-              await http.delete(url, headers: headers);
+          Response response = await http.delete(url, headers: headers);
 
           if (response.statusCode >= 200 && response.statusCode <= 202) {
             final responseData = jsonDecode(response.body);
@@ -116,6 +115,51 @@ class ProductsRepository {
       }
     } else {
       return "Error";
+    }
+  }
+
+  Future<Either<List<Map<String, dynamic>>, String>> getFavProducts() async {
+    if (await checkConnection()) {
+      try {
+        var url = Uri.parse("${AppUrl.baseUrl}${AppUrl.favorites}");
+        String? token = await SharedPreferencesHelper().getToken();
+        if (token != null) {
+          final headers = {
+            'lang': 'ar',
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          };
+          Response response = await http.get(
+            url,
+            headers: headers,
+          );
+          if (response.statusCode >= 200 && response.statusCode <= 202) {
+            var body = jsonDecode(response.body);
+            if (body["status"]) {
+              var data = body["data"]["data"];
+              List<Map<String, dynamic>> favList = [];
+              for (int i = 0; i < data.length; i++) {
+                favList.add({
+                  "id": data[i]["id"],
+                  "product": Product.fromJson(json: data[i]["product"]),
+                });
+              }
+              return Left(favList);
+            } else {
+              return const Right(AppText.serverError);
+            }
+          } else {
+            return const Right(AppText.serverError);
+          }
+        } else {
+          return const Right(AppText.unKnownError);
+        }
+      } catch (e) {
+        log(e.toString());
+        return const Right(AppText.unKnownError);
+      }
+    } else {
+      return const Right(AppText.internetError);
     }
   }
 }
