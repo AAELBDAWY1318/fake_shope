@@ -20,7 +20,9 @@ class AppLayout extends StatefulWidget {
 
 class _AppLayoutState extends State<AppLayout> {
   int index = 0;
-  List<Widget> screens = [const HomeScreen(), const ProfileScreen()];
+  late User myUser;
+  late List<Widget> screens;
+
   Future<bool> onWillPop() async {
     if (index == 1) {
       // If the current screen is Profile
@@ -30,6 +32,16 @@ class _AppLayoutState extends State<AppLayout> {
       return false; // Prevent the app from exiting
     }
     return true; // Allow the app to exit
+  }
+
+  @override
+  void initState() {
+    myUser = widget.user;
+    screens = [
+      const HomeScreen(),
+      ProfileScreen(user: myUser), // Now myUser is initialized
+    ];
+    super.initState();
   }
 
   @override
@@ -48,8 +60,9 @@ class _AppLayoutState extends State<AppLayout> {
             Padding(
               padding: EdgeInsets.only(right: sizeConfig.screenWidth! * 0.03),
               child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.shopping_basket_sharp)),
+                onPressed: () {},
+                icon: const Icon(Icons.shopping_basket_sharp),
+              ),
             ),
           ],
         ),
@@ -70,14 +83,12 @@ class _AppLayoutState extends State<AppLayout> {
                   fit: BoxFit.cover,
                 ),
                 EditProfile(
-                    onTap: () {
-                      push(context,
-                          page: EditProfileScreen(
-                            user: widget.user,
-                          ));
-                    },
-                    image: widget.user.image,
-                    name: widget.user.name),
+                  onTap: () {
+                    push(context, page: EditProfileScreen(user: widget.user));
+                  },
+                  image: widget.user.image,
+                  name: widget.user.name,
+                ),
                 SizedBox(
                   height: sizeConfig.screenHeight! * 0.02,
                 ),

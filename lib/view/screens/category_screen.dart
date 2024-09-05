@@ -3,6 +3,8 @@ import 'package:fake_shope_app/logic/product_bloc/product_bloc.dart';
 import 'package:fake_shope_app/utils/constant/app_colors.dart';
 import 'package:fake_shope_app/utils/constant/app_text.dart';
 import 'package:fake_shope_app/utils/helpers/size.dart';
+import 'package:fake_shope_app/utils/route_navigation/routes.dart';
+import 'package:fake_shope_app/view/screens/product_details.dart';
 import 'package:fake_shope_app/view/widgets/animated_error.dart';
 import 'package:fake_shope_app/view/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,11 @@ class CategoryScreen extends StatelessWidget {
                     return CustomCard(
                       image: state.products[index].image,
                       name: state.products[index].name,
-                      onTap: () {},
+                      onTap: () {
+                        push(context,
+                            page:
+                                ProductDetails(product: state.products[index]));
+                      },
                       price: "\$ ${state.products[index].price}",
                     );
                   },
