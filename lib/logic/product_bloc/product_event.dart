@@ -21,3 +21,11 @@ class AddToFavEvent extends ProductEvent{
   const AddToFavEvent({required this.productId});
 }
 
+class GetFavEvent extends ProductEvent{}
+
+class UpdateProfileEvent extends ProductEvent{
+  final User user;
+
+  const UpdateProfileEvent({required this.user});
+}
+

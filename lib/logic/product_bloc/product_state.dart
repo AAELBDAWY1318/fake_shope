@@ -37,17 +37,44 @@ class GetCategorySuccess extends ProductState {
   const GetCategorySuccess({required this.products});
 }
 
-class AddToFavWaiting extends ProductState{}
+class AddToFavWaiting extends ProductState {}
 
-class AddToFavSuccess extends ProductState{
+class AddToFavSuccess extends ProductState {
   final String message;
 
   const AddToFavSuccess({required this.message});
-
 }
 
-class AddToFavFailure extends ProductState{
+class AddToFavFailure extends ProductState {
   final String message;
 
   const AddToFavFailure({required this.message});
+}
+
+class GetFavWaiting extends ProductState {}
+
+class GetFavSuccess extends ProductState {
+  final List<Map<String, dynamic>> favList;
+
+  const GetFavSuccess({required this.favList});
+}
+
+class GetFavFailure extends ProductState {
+  final String message;
+
+  const GetFavFailure({required this.message});
+}
+
+class UpdateProfileWaiting extends ProductState {}
+
+class UpdateProfileSuccess extends ProductState {
+  final String message;
+
+  const UpdateProfileSuccess({required this.message});
+}
+
+class UpdateProfileFailure extends ProductState {
+  final String message;
+
+  const UpdateProfileFailure({required this.message});
 }

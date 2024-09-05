@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:fake_shope_app/data/models/user_model.dart';
 import 'package:fake_shope_app/utils/constant/app_colors.dart';
-import 'package:fake_shope_app/utils/helpers/shared_preferences_helper.dart';
 import 'package:fake_shope_app/utils/helpers/size.dart';
 import 'package:fake_shope_app/utils/route_navigation/routes.dart';
+import 'package:fake_shope_app/view/screens/edit_profile.dart';
 import 'package:fake_shope_app/view/screens/home_screen/home_screen.dart';
 import 'package:fake_shope_app/view/screens/home_screen/profile.dart';
 import 'package:fake_shope_app/view/screens/watchlist_screen.dart';
@@ -71,7 +69,15 @@ class _AppLayoutState extends State<AppLayout> {
                   width: sizeConfig.screenWidth! * 0.2,
                   fit: BoxFit.cover,
                 ),
-                EditProfile(onTap: () {}, image: widget.user.image, name: widget.user.name),
+                EditProfile(
+                    onTap: () {
+                      push(context,
+                          page: EditProfileScreen(
+                            user: widget.user,
+                          ));
+                    },
+                    image: widget.user.image,
+                    name: widget.user.name),
                 SizedBox(
                   height: sizeConfig.screenHeight! * 0.02,
                 ),
@@ -111,7 +117,7 @@ class _AppLayoutState extends State<AppLayout> {
                   title: const Text('Wallet'),
                   onTap: () {},
                 ),
-                 ListTile(
+                ListTile(
                   leading: Icon(
                     Icons.settings,
                     size: sizeConfig.screenWidth! * 0.08,

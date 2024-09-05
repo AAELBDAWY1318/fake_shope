@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:either_dart/either.dart';
 import 'package:fake_shope_app/data/models/product_model.dart';
+import 'package:fake_shope_app/data/models/user_model.dart';
 import 'package:fake_shope_app/utils/constant/app_text.dart';
 import 'package:fake_shope_app/utils/constant/app_urls.dart';
 import 'package:fake_shope_app/utils/functions/check_connection.dart';
@@ -157,6 +158,44 @@ class ProductsRepository {
       } catch (e) {
         log(e.toString());
         return const Right(AppText.unKnownError);
+      }
+    } else {
+      return const Right(AppText.internetError);
+    }
+  }
+
+  Future<Either<String, String>> updateProfile(User user) async {
+    if (await checkConnection()) {
+      try {
+        var url = Uri.parse("${AppUrl.baseUrl}${AppUrl.updateProfile}");
+        String? token = await SharedPreferencesHelper().getToken();
+        if (token != null) {
+          final headers = {
+            'lang': 'ar',
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          };
+          Response response = await http.put(
+            url,
+            headers: headers,
+            body: user.toJson(), 
+          );
+          if (response.statusCode >= 200 && response.statusCode <= 202) {
+            var body = jsonDecode(response.body);
+            if (body["status"]) {
+              return const Left("Success");
+            } else {
+              return const Right(AppText.serverError);
+            }
+          } else {
+            return const Right(AppText.serverError);
+          }
+        } else {
+          return const Right(AppText.unKnownError);
+        }
+      } catch (e) {
+        log(e.toString());
+        return const Right("Error");
       }
     } else {
       return const Right(AppText.internetError);

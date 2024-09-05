@@ -3,6 +3,7 @@ import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fake_shope_app/data/data_source/remote_data/products_repository.dart';
 import 'package:fake_shope_app/data/models/product_model.dart';
+import 'package:fake_shope_app/data/models/user_model.dart';
 import 'package:fake_shope_app/utils/constant/app_text.dart';
 import 'package:fake_shope_app/utils/constant/app_urls.dart';
 
@@ -15,6 +16,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<GetAllProductsEvent>(onGetAllProductsEvent);
     on<GetCategoryEvent>(getCategory);
     on<AddToFavEvent>(addToFav);
+    on<GetFavEvent>(onGetFav);
+    on<UpdateProfileEvent>(updateProfile);
   }
 
   Future<void> onGetAllProductsEvent(
@@ -68,6 +71,34 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       }
     } catch (e) {
       emit(const AddToFavFailure(message: "Error"));
+    }
+  }
+
+  Future<void> onGetFav(GetFavEvent event, Emitter emit) async {
+    try {
+      emit(GetFavWaiting());
+      var res = await productsRepository.getFavProducts();
+      res.fold((left) {
+        emit(GetFavSuccess(favList: left));
+      }, (right) {
+        emit(GetFavFailure(message: right));
+      });
+    } catch (e) {
+      emit(const GetFavFailure(message: AppText.unKnownError));
+    }
+  }
+
+  Future<void> updateProfile(UpdateProfileEvent event, Emitter emit) async {
+    try {
+      emit(UpdateProfileWaiting());
+      var res = await productsRepository.updateProfile(event.user);
+      res.fold((left) {
+        emit(UpdateProfileSuccess(message: left));
+      }, (right) {
+        emit(UpdateProfileFailure(message: right));
+      });
+    } catch (e) {
+      emit(const UpdateProfileFailure(message: AppText.unKnownError));
     }
   }
 }

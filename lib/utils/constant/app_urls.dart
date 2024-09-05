@@ -8,4 +8,5 @@ class AppUrl {
   static const String getSportCategory = "products?category_id=42";
   static const String getLightCategory = "products?category_id=40";
   static const String favorites = "favorites";
+  static const String updateProfile = "update-profile";
 }
