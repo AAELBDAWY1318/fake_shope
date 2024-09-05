@@ -85,6 +85,58 @@ class ProductsRepository {
     }
   }
 
+  Future<String> addToCart(
+      {required int productId, required int quantity}) async {
+    if (await checkConnection()) {
+      try {
+        String? token = await SharedPreferencesHelper().getToken();
+        if (token != null) {
+          final headers = {
+            'lang': 'ar',
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          };
+          final body = jsonEncode({
+            'product_id': productId,
+          });
+          var url = Uri.parse("${AppUrl.baseUrl}${AppUrl.carts}");
+          Response response =
+              await http.post(url, body: body, headers: headers);
+
+          if (response.statusCode >= 200 && response.statusCode <= 202) {
+            final responseData = jsonDecode(response.body);
+            if (responseData['status']) {
+              int id = responseData["data"]["id"];
+              log("$id");
+              Response resp = await http.put(
+                  Uri.parse("${AppUrl.baseUrl}${AppUrl.carts}/$id"),
+                  headers: headers,
+                  body: jsonEncode({"quantity": quantity}));
+              log("${resp.statusCode}");
+              var body = jsonDecode(resp.body);
+              if (body["status"]) {
+                return "Success";
+              } else {
+                return "Error";
+              }
+            } else {
+              return "Error";
+            }
+          } else {
+            return "Error";
+          }
+        } else {
+          return "Error";
+        }
+      } catch (e) {
+        log(e.toString());
+        return "Error";
+      }
+    } else {
+      return "Error";
+    }
+  }
+
   Future<String> deteteFromFav({required int id}) async {
     if (await checkConnection()) {
       try {
@@ -178,7 +230,7 @@ class ProductsRepository {
           Response response = await http.put(
             url,
             headers: headers,
-            body: user.toJson(), 
+            body: user.toJson(),
           );
           if (response.statusCode >= 200 && response.statusCode <= 202) {
             var body = jsonDecode(response.body);

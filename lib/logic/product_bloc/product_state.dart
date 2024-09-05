@@ -78,3 +78,17 @@ class UpdateProfileFailure extends ProductState {
 
   const UpdateProfileFailure({required this.message});
 }
+
+class AddToCartWaiting extends ProductState {}
+
+class AddToCartSuccess extends ProductState {
+  final String message;
+
+  const AddToCartSuccess({required this.message});
+}
+
+class AddToCartFailure extends ProductState {
+  final String message;
+
+  const AddToCartFailure({required this.message});
+}

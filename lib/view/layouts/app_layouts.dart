@@ -2,6 +2,7 @@ import 'package:fake_shope_app/data/models/user_model.dart';
 import 'package:fake_shope_app/utils/constant/app_colors.dart';
 import 'package:fake_shope_app/utils/helpers/size.dart';
 import 'package:fake_shope_app/utils/route_navigation/routes.dart';
+import 'package:fake_shope_app/view/screens/cart.dart';
 import 'package:fake_shope_app/view/screens/edit_profile.dart';
 import 'package:fake_shope_app/view/screens/home_screen/home_screen.dart';
 import 'package:fake_shope_app/view/screens/home_screen/profile.dart';
@@ -60,7 +61,9 @@ class _AppLayoutState extends State<AppLayout> {
             Padding(
               padding: EdgeInsets.only(right: sizeConfig.screenWidth! * 0.03),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  push(context, page: const CartScreen());
+                },
                 icon: const Icon(Icons.shopping_basket_sharp),
               ),
             ),

@@ -29,3 +29,9 @@ class UpdateProfileEvent extends ProductEvent{
   const UpdateProfileEvent({required this.user});
 }
 
+class AddToCartEvent extends ProductEvent{
+  final int productId , quqntity;
+
+  const AddToCartEvent({required this.productId , required this.quqntity,});
+}
+

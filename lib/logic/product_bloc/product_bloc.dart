@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
@@ -18,6 +20,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<AddToFavEvent>(addToFav);
     on<GetFavEvent>(onGetFav);
     on<UpdateProfileEvent>(updateProfile);
+    on<AddToCartEvent>(addToCart);
   }
 
   Future<void> onGetAllProductsEvent(
@@ -70,7 +73,23 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(const AddToFavFailure(message: "Error"));
       }
     } catch (e) {
+      log(e.toString());
       emit(const AddToFavFailure(message: "Error"));
+    }
+  }
+
+  Future<void> addToCart(AddToCartEvent event, Emitter emit) async {
+    try {
+      emit(AddToFavWaiting());
+      String res = await productsRepository.addToCart(
+          productId: event.productId, quantity: event.quqntity);
+      if (res == "Success") {
+        emit(const AddToCartSuccess(message: "Adding Success"));
+      } else {
+        emit(const AddToCartFailure(message: "Error"));
+      }
+    } catch (e) {
+      emit(const AddToCartFailure(message: "Error"));
     }
   }
 

@@ -65,6 +65,36 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
               );
             }
+
+            if (state is AddToCartWaiting) {
+              showLoadingDialog(context);
+            } else if (state is AddToCartFailure) {
+              pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } else if (state is AddToCartSuccess) {
+              pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
           },
           builder: (context, state) {
             return Padding(
@@ -198,7 +228,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: CustomButton(
-                              function: () {},
+                              function: () {
+                                context.read<ProductBloc>().add(AddToCartEvent(
+                                    productId: widget.product.id,
+                                    quqntity: counter));
+                              },
                               text: "Add To Cart",
                             ),
                           ),
