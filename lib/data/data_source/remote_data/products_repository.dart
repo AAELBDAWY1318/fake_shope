@@ -253,4 +253,47 @@ class ProductsRepository {
       return const Right(AppText.internetError);
     }
   }
+
+  Future<Either<List<Map<String, dynamic>>, String>> getCart() async {
+    if (await checkConnection()) {
+      try {
+        var url = Uri.parse("${AppUrl.baseUrl}${AppUrl.carts}");
+        String? token = await SharedPreferencesHelper().getToken();
+        if (token != null) {
+          final headers = {
+            'lang': 'ar',
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          };
+          Response response = await http.get(url, headers: headers);
+          if (response.statusCode >= 200 && response.statusCode <= 202) {
+            var body = jsonDecode(response.body);
+            if (body["status"]) {
+              var data = body["data"]["cart_items"];
+              List<Map<String, dynamic>> cartList = [];
+              for (int i = 0; i < data.length; i++) {
+                cartList.add({
+                  "id": data[i]["id"],
+                  "quantity": data[i]["quantity"],
+                  "product": Product.fromJson(json: data[i]["product"]),
+                });
+              }
+              return Left(cartList);
+            } else {
+              return const Right(AppText.serverError);
+            }
+          } else {
+            return const Right(AppText.serverError);
+          }
+        } else {
+          return const Right(AppText.unKnownError);
+        }
+      } catch (e) {
+        log(e.toString());
+        return const Right(AppText.unKnownError);
+      }
+    } else {
+      return const Right(AppText.internetError);
+    }
+  }
 }

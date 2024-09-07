@@ -35,3 +35,5 @@ class AddToCartEvent extends ProductEvent{
   const AddToCartEvent({required this.productId , required this.quqntity,});
 }
 
+class GetCartsEvent extends ProductEvent{}
+

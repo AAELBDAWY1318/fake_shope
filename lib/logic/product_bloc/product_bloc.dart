@@ -21,6 +21,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<GetFavEvent>(onGetFav);
     on<UpdateProfileEvent>(updateProfile);
     on<AddToCartEvent>(addToCart);
+    on<GetCartsEvent>(getCarts);
   }
 
   Future<void> onGetAllProductsEvent(
@@ -118,6 +119,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       });
     } catch (e) {
       emit(const UpdateProfileFailure(message: AppText.unKnownError));
+    }
+  }
+
+  Future<void> getCarts(GetCartsEvent event, Emitter emit) async {
+    try {
+      emit(GetCartsWaiting());
+      var res = await productsRepository.getCart();
+      res.fold((left) {
+        emit(GetCartsSuccess(cartsList: left));
+      }, (right) {
+        emit(GetCartsFailure(message: right));
+      });
+    } catch (e) {
+      log(e.toString());
+      emit(const GetCartsFailure(message: AppText.unKnownError));
     }
   }
 }

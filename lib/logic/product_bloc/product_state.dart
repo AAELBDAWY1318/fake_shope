@@ -92,3 +92,17 @@ class AddToCartFailure extends ProductState {
 
   const AddToCartFailure({required this.message});
 }
+
+class GetCartsWaiting extends ProductState {}
+
+class GetCartsFailure extends ProductState {
+  final String message;
+
+  const GetCartsFailure({required this.message});
+}
+
+class GetCartsSuccess extends ProductState {
+  final List<Map<String, dynamic>> cartsList;
+
+  const GetCartsSuccess({required this.cartsList});
+}
